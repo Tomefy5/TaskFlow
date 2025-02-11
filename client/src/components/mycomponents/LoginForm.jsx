@@ -1,5 +1,6 @@
-"use client";
-import { Button } from "@/components/ui/button";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormField,
@@ -9,18 +10,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { Button } from "../ui/button";
 
-const signupSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Invalid email"),
-  password: z.string().min(4, "Password must contains at least 4 characters"),
-});
+export default function LoginForm() {
+  const signupSchema = z.object({
+    name: z.string().min(2, "Name must contain at least 2 characters"),
+    email: z.string().email("Invalid email").min(1, "Email is required"),
+    password: z.string().min(6, "Password must contain at least 6 characters"),
+  });
 
-export default function SignupForm() {
+  const form = useForm({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
+
   const formFields = [
-    { field: "Name", placeholder: "your name...", name: "name", type: "text" },
     {
       field: "Email",
       placeholder: "your email...",
@@ -35,17 +43,8 @@ export default function SignupForm() {
     },
   ];
 
-  const form = useForm({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
-  });
-
-  const onSubmit = (values) => {
-    console.log("Connexion", values);
+  const onSubmit = (data) => {
+    console.log("Valeurs", data);
   };
 
   return (
@@ -58,18 +57,18 @@ export default function SignupForm() {
           Sign Up
         </h1>
 
-        {formFields.map((fieldForm, index) => (
+        {formFields.map((formField, index) => (
           <FormField
-            control={form.control}
-            name={fieldForm.name}
             key={index}
+            control={form.control}
+            name={formField.name}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{fieldForm.field}</FormLabel>
+                <FormLabel>{formField.field}</FormLabel>
                 <FormControl>
                   <Input
-                    type={fieldForm.type}
-                    placeholder={fieldForm.placeholder}
+                    type={formField.type}
+                    placeholder={formField.placeholder}
                     {...field}
                   />
                 </FormControl>
