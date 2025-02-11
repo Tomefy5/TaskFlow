@@ -14,10 +14,10 @@ export default function Header() {
         {/* Buttons */}
         <div className="flex items-center space-x-4">
           <Button asChild variant="outline">
-            <Link href="/signup">Sign Up</Link>
+            <Link to="/signup">Sign Up</Link>
           </Button>
           <Button asChild>
-            <Link href="/login">Login</Link>
+            <Link to="/login">Login</Link>
           </Button>
         </div>
       </div>

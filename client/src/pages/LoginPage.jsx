@@ -1,5 +1,9 @@
+import BasicLayout from "@/layouts/BasicLayout";
+
 export default function LoginPage() {
   return (
-    <div>LoginPage</div>
+    <BasicLayout>
+      LoginPage
+    </BasicLayout>
   )
 }

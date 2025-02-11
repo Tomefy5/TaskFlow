@@ -13,7 +13,7 @@ export default function Footer() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Mention de copyright */}
         <div className="text-sm">
-          &copy; {new Date().getFullYear()} TaskFlow. All rights reserved 
+          &copy; {new Date().getFullYear()} TaskFlow. All rights reserved    
         </div>
         {/* Liens vers les réseaux sociaux */}
         <div className="flex items-center space-x-4">
