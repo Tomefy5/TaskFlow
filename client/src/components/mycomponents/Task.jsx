@@ -5,13 +5,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { Menu, Clock } from "lucide-react";
+import { Menu, Clock, Pencil, Trash } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default function Task() {
   return (
     <Card className="w-full">
+      {/* Title and descri */}
       <CardHeader className="flex flex-col gap-2">
         <CardTitle>Title</CardTitle>
         <CardDescription>
@@ -19,10 +26,25 @@ export default function Task() {
           one-click Deploy your new project in one-click
         </CardDescription>
       </CardHeader>
+
+      {/* Infos and actions */}
       <CardFooter className="flex gap-0 md:gap-2">
-        <Button variant="ghost" className="px-3">
-          <Menu />
-        </Button>
+        {/* Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="px-3">
+              <Menu />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="flex">
+            <DropdownMenuItem>
+              <Button variant="ghost"><Pencil/></Button>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Button variant="ghost"><Trash/></Button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <div className="flex justify-center items-center gap-2 mr-4">
           <Clock size={18} />
           <span className="text-sm">July 15</span>
