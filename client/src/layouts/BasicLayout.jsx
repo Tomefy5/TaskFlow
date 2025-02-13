@@ -3,10 +3,10 @@ import Header from "@/components/mycomponents/Header";
 
 export default function BasicLayout({ children }) {
   return (
-    <div>
+    <div className="relative w-full h-full min-h-screen flex flex-col pb-24">
       <Header />
       <main>{children}</main>
-      <Footer />
+      <Footer />  
     </div>
   );
 }

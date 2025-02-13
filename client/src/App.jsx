@@ -8,7 +8,7 @@ import LoginPage from "./pages/LoginPage";
   
   function App() {
   return (
-    <div >
+    <div>
        <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/tasks" element={<TaskFlowPage/>} />
