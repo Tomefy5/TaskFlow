@@ -11,4 +11,7 @@ router.get("/get-tasks", taskControllers.getTasksHandler);
 // Route for deleting task
 router.delete("/delete-task", taskControllers.deleteTaskHandler);
 
+// Route for updating task
+router.put("/update-task", taskControllers.updateTaskHandler);
+
 module.exports = router;

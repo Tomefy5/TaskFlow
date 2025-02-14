@@ -55,7 +55,6 @@ const getTasks = async (isFinished, isDoing) => {
 };
 
 const deleteTask = async (taskId) => {
-
   const taskObjectId = new mongoose.Types.ObjectId(taskId);
 
   try {
@@ -68,8 +67,20 @@ const deleteTask = async (taskId) => {
   }
 };
 
+const updateTask = async (taskId, update) => {
+  const taskObjectId = new mongoose.Types.ObjectId(taskId);
+  try {
+    const taskToUpdate = await Task.findByIdAndUpdate(taskObjectId, update);
+    if (!taskToUpdate) throw new Error("updateTask: can't find task");
+    return taskToUpdate;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createTask,
   getTasks,
   deleteTask,
+  updateTask,
 };
