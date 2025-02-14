@@ -21,6 +21,20 @@ const createTask = async (task) => {
   }
 };
 
+const getTasks = async (isFinished) => {
+
+  if(typeof isFinished !== "boolean") throw new Error("getTasks: param must be a boolean");
+
+  try {
+    const tasks = await Task.find({ finished: isFinished });
+    if (!tasks) throw new Error("getTasks: failed to get tasks");
+    return tasks;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createTask,
+  getTasks,
 };
