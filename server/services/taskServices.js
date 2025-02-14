@@ -21,12 +21,31 @@ const createTask = async (task) => {
   }
 };
 
-const getTasks = async (isFinished) => {
+const getTasks = async (isFinished, isDoing) => {
+  if (typeof isFinished !== "boolean")
+    throw new Error("getTasks: param must be a boolean");
 
-  if(typeof isFinished !== "boolean") throw new Error("getTasks: param must be a boolean");
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const startOfTomorrow = new Date(startOfToday);
+  startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+
+  let tasks;
 
   try {
-    const tasks = await Task.find({ finished: isFinished });
+    if (isDoing && !isFinished) {
+      tasks = await Task.find({
+        finished: isFinished,
+        deadline: {
+          $gte: startOfToday,
+          $lt: startOfTomorrow,
+        },
+      });
+    } else if ((!isDoing && !isFinished) || isFinished) {
+      tasks = await Task.find({ finished: isFinished });
+    }
+
     if (!tasks) throw new Error("getTasks: failed to get tasks");
     return tasks;
   } catch (error) {
