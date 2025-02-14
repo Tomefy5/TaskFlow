@@ -15,6 +15,9 @@ import { z } from "zod";
 import DatePicker from "./DatePicker";
 import { PriorityCombobox } from "./PriorityComboBox";
 
+import { useTaskStore } from "@/store/taskStore";
+import { createTask } from "@/services/taskServices";
+
 const formSchema = z.object({
   title: z.string().min(2, "At least 2 characters"),
   description: z.string(),
@@ -27,25 +30,30 @@ const formSchema = z.object({
 });
 
 export default function NewTaskForm() {
+  const tasks = useTaskStore((state) => state.tasks);
+  const addNewTask = useTaskStore(state => state.addNewTask);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
-      deadline: null, // Correction ici
+      deadline: undefined,
       priority: "low",
     },
   });
 
   const onSubmit = (data) => {
-    console.log("Form Data:", data);
+    addNewTask(data);
+    createTask(data);
+    form.reset();
   };
 
   return (
     <Form {...form}>
+      {console.log(tasks)}
       <form onSubmit={form.handleSubmit(onSubmit)}>
         {" "}
-        {/* Ajout du onSubmit */}
         <FormField
           control={form.control}
           name="title"
@@ -83,12 +91,11 @@ export default function NewTaskForm() {
             </FormItem>
           )}
         />
-
         {/* Select Priority */}
         <FormField
           control={form.control}
           name="priority"
-          render={({field}) => (
+          render={({ field }) => (
             <FormItem className="my-4 flex flex-col">
               <FormLabel>Priority</FormLabel>
               <PriorityCombobox {...field} />
@@ -96,7 +103,7 @@ export default function NewTaskForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Save changes</Button>
+        <Button type="submit">Create</Button>
       </form>
     </Form>
   );

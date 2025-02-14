@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,14 +15,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-// Options de priorité
 const priorities = [
-  { value: "high", label: "Haute" },
-  { value: "medium", label: "Moyenne" },
-  { value: "low", label: "Faible" },
+  { value: "high", label: "High" },
+  { value: "medium", label: "Medium" },
+  { value: "low", label: "Low" },
 ];
 
-export function PriorityCombobox({ value, onChange }) {
+export const PriorityCombobox = forwardRef(function PriorityCombobox(
+  { value, onChange },
+  ref
+) {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
@@ -30,6 +32,7 @@ export function PriorityCombobox({ value, onChange }) {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          ref={ref} 
           variant="outline"
           role="combobox"
           aria-expanded={open}
@@ -49,7 +52,7 @@ export function PriorityCombobox({ value, onChange }) {
             onValueChange={setInputValue}
           />
           <CommandList>
-            <CommandEmpty>Aucune option trouvée</CommandEmpty>
+            <CommandEmpty>Option not found</CommandEmpty>
             <CommandGroup>
               {priorities
                 .filter((p) =>
@@ -79,4 +82,4 @@ export function PriorityCombobox({ value, onChange }) {
       </PopoverContent>
     </Popover>
   );
-}
+});
