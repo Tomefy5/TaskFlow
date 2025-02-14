@@ -8,4 +8,7 @@ router.post("/tasks", taskControllers.createTaskHandler);
 // Route for getting filtered tasks
 router.get("/get-tasks", taskControllers.getTasksHandler);
 
+// Route for deleting task
+router.delete("/delete-task", taskControllers.deleteTaskHandler);
+
 module.exports = router;

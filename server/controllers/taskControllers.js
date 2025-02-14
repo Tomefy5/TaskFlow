@@ -1,4 +1,8 @@
-const { createTask, getTasks } = require("../services/taskServices");
+const {
+  createTask,
+  getTasks,
+  deleteTask,
+} = require("../services/taskServices");
 
 const createTaskHandler = async (req, res) => {
   const task = req.body;
@@ -30,7 +34,19 @@ const getTasksHandler = async (req, res) => {
   }
 };
 
+const deleteTaskHandler = async (req, res) => {
+  const { taskId } = req.query;
+
+  try {
+    const taskToDelete = await deleteTask(taskId);
+    res.status(200).json(taskToDelete);
+  } catch (error) {
+    res.status(500).json({ message: `Error: ${error.message}` });
+  }
+};
+
 module.exports = {
   createTaskHandler,
   getTasksHandler,
+  deleteTaskHandler,
 };

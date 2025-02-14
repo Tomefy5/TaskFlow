@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Task = require("../models/Task");
 
 const createTask = async (task) => {
@@ -53,7 +54,22 @@ const getTasks = async (isFinished, isDoing) => {
   }
 };
 
+const deleteTask = async (taskId) => {
+
+  const taskObjectId = new mongoose.Types.ObjectId(taskId);
+
+  try {
+    const taskToDelete = await Task.findByIdAndDelete(taskObjectId);
+    if (!taskToDelete)
+      throw new Error("deleteTask:  can't find the task to delete");
+    return taskToDelete;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createTask,
   getTasks,
+  deleteTask,
 };
