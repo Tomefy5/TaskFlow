@@ -2,8 +2,14 @@ import { Ellipsis } from "lucide-react";
 import { Button } from "../ui/button";
 import Task from "./Task";
 import { useDrop } from "react-dnd";
+import { useTaskStore } from "@/store/taskStore";
+import { useEffect } from "react";
+import { fetchTasksToDo } from "@/services/taskServices";
 
 export default function ContainerTasksDone() {
+  const taskDone = useTaskStore((state) => state.taskDone);
+  const setTaskDone = useTaskStore((state) => state.setTaskDone);
+
   const [{ isOver }, dropref] = useDrop({
     accept: "TASK",
     drop: (item) => ondrop(item),
@@ -12,6 +18,18 @@ export default function ContainerTasksDone() {
     }),
   });
 
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const taskDone = await fetchTasksToDo(true, false);
+        setTaskDone(taskDone);
+      } catch (error) {
+        console.error(`Error on fetching task: `, error.message);
+      }
+    };
+    fetchTasks();
+  }, [setTaskDone]);
+
   return (
     <div
       ref={dropref}
@@ -19,6 +37,7 @@ export default function ContainerTasksDone() {
         isOver ? "bg-red-300" : ""
       }`}
     >
+      {console.log(taskDone)}
       <div className="items-center flex justify-between">
         <h2 className="font-bold text-lg md:text-2xl">Done</h2>
         <Button variant="ghost" className="flex justify-center items-center">
@@ -26,9 +45,10 @@ export default function ContainerTasksDone() {
         </Button>
       </div>
       {/*//!List todo */}
-      <div className="flex flex-col gap-3 my-4">
-        <Task />
-        <Task />
+      <div className="flex flex-col gap-3 my-4 max-h-[70vh] overflow-auto p-2">
+        {taskDone.map((task, index) => (
+          <Task key={index} task={task} />
+        ))}
       </div>
     </div>
   );

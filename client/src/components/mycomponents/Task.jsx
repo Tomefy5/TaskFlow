@@ -16,7 +16,7 @@ import { Menu, Clock, Pencil, Trash } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useDrag } from "react-dnd";
 
-export default function Task({name}) {
+export default function Task({ name, task }) {
   const [{ isDragging }, dragRef] = useDrag({
     type: "TASK",
     item: name,
@@ -26,14 +26,11 @@ export default function Task({name}) {
   });
 
   return (
-    <Card className={`w-full ${isDragging ? 'opacity-40' : ''}`} ref={dragRef}>
+    <Card className={`w-full ${isDragging ? "opacity-40" : ""}`} ref={dragRef}>
       {/* Title and descri */}
       <CardHeader className="flex flex-col gap-2">
-        <CardTitle>Title</CardTitle>
-        <CardDescription>
-          Deploy your new project in one-click. Deploy your new project in
-          one-click Deploy your new project in one-click
-        </CardDescription>
+        <CardTitle>{task.title}</CardTitle>
+        <CardDescription>{task.description}</CardDescription>
       </CardHeader>
 
       {/* Infos and actions */}
@@ -60,10 +57,18 @@ export default function Task({name}) {
         </DropdownMenu>
         <div className="flex justify-center items-center gap-2 mr-4">
           <Clock size={18} />
-          <span className="text-sm">July 15</span>
+          <span className="text-sm">
+            {task.deadline
+              ? new Date(task.deadline).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "None"}
+          </span>
         </div>
         <Badge className={"w-[60px] flex justify-center items-center"}>
-          High
+          {task.priority}
         </Badge>
       </CardFooter>
     </Card>

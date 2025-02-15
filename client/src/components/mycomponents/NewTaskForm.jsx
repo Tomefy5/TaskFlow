@@ -21,9 +21,16 @@ import { createTask } from "@/services/taskServices";
 const formSchema = z.object({
   title: z.string().min(2, "At least 2 characters"),
   description: z.string(),
-  deadline: z.date().refine((date) => date > new Date(), {
-    message: "Date must be later than today",
-  }),
+  deadline: z.date().refine(
+    (date) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return date >= today;
+    },
+    {
+      message: "Date must be today or later",
+    }
+  ),
   priority: z.enum(["high", "medium", "low"], {
     message: "Priority must be: high, medium or low",
   }),
@@ -31,7 +38,8 @@ const formSchema = z.object({
 
 export default function NewTaskForm() {
   const tasks = useTaskStore((state) => state.tasks);
-  const addNewTask = useTaskStore(state => state.addNewTask);
+  const addNewTaskToDo = useTaskStore((state) => state.addNewTaskToDo);
+  const addNewTaskDoing = useTaskStore((state) => state.addNewTaskDoing);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -44,7 +52,18 @@ export default function NewTaskForm() {
   });
 
   const onSubmit = (data) => {
-    addNewTask(data);
+    const taskDeadline = new Date(data.deadline);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    if (taskDeadline >= today && taskDeadline < tomorrow) {
+      addNewTaskDoing(data);
+    } else {
+      addNewTaskToDo(data);
+    }
     createTask(data);
     form.reset();
   };
