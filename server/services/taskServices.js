@@ -43,8 +43,16 @@ const getTasks = async (isFinished, isDoing) => {
           $lt: startOfTomorrow,
         },
       });
-    } else if ((!isDoing && !isFinished) || isFinished) {
-      tasks = await Task.find({ finished: isFinished });
+    } else if (!isDoing && !isFinished) {
+      tasks = await Task.find({
+        finished: isFinished,
+        $or: [
+          { deadline: { $lt: startOfToday } },
+          { deadline: { $gte: startOfTomorrow } },
+        ],
+      });
+    } else {
+      tasks = await Task.find({ finished: true });
     }
 
     if (!tasks) throw new Error("getTasks: failed to get tasks");

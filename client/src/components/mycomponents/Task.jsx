@@ -15,8 +15,13 @@ import { Button } from "../ui/button";
 import { Menu, Clock, Pencil, Trash } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useDrag } from "react-dnd";
+import { useTaskStore } from "@/store/taskStore";
+import { deleteTask } from "@/services/taskServices";
 
 export default function Task({ name, task }) {
+
+  const deleteTaskFromStore = useTaskStore(state => state.deleteTaskFromStore);
+
   const [{ isDragging }, dragRef] = useDrag({
     type: "TASK",
     item: name,
@@ -24,6 +29,11 @@ export default function Task({ name, task }) {
       isDragging: !!monitor.isDragging(),
     }),
   });
+
+  const handleTaskDelete = async (task) => {
+    await deleteTask(task._id);
+    deleteTaskFromStore(task);
+  }
 
   return (
     <Card className={`w-full ${isDragging ? "opacity-40" : ""}`} ref={dragRef}>
@@ -49,7 +59,7 @@ export default function Task({ name, task }) {
               </Button>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Button variant="ghost">
+              <Button onClick={() => handleTaskDelete(task)} variant="ghost">
                 <Trash />
               </Button>
             </DropdownMenuItem>

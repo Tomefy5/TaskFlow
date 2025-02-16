@@ -21,3 +21,12 @@ export const fetchTasksToDo = async (isFinished, isDoing) => {
     console.log(error.message);
   }
 };
+
+export const deleteTask = async (taskId) => {
+  try {
+    const response = await api.delete(`/delete-task?taskId=${taskId}`);
+    console.log(response.data);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
