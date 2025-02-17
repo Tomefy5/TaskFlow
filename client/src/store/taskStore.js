@@ -9,6 +9,20 @@ export const useTaskStore = create((set) => ({
     set((state) => ({ taskToDo: [...state.taskToDo, newTask] })),
   addNewTaskDoing: (newTask) =>
     set((state) => ({ taskDoing: [...state.taskDoing, newTask] })),
+  addNewTaskDone: (newTask) =>
+    set((state) => ({ taskDone: [...state.taskDoing, newTask] })),
+  removeToDo: (taskId) =>
+    set((state) => ({
+      taskToDo: state.taskToDo.filter((task) => task._id !== taskId),
+    })),
+  removeDoing: (taskId) =>
+    set((state) => ({
+      taskDoing: state.taskDoing.filter((task) => task._id !== taskId),
+    })),
+  removeDone: (taskId) =>
+    set((state) => ({
+      taskDone: state.taskDone.filter((task) => task._id !== taskId),
+    })),
   setTaskToDo: (tasksFetched) =>
     set((state) => ({ taskToDo: [...tasksFetched, ...state.taskToDo] })),
   setTaskDoing: (tasksFetched) =>
@@ -17,7 +31,6 @@ export const useTaskStore = create((set) => ({
     set((state) => ({ taskDone: [...tasksFetched, ...state.taskDone] })),
   deleteTaskFromStore: (task) =>
     set((state) => {
-      console.log("DeleteTask\n");
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
@@ -28,21 +41,18 @@ export const useTaskStore = create((set) => ({
       deadline.setHours(0, 0, 0, 0);
 
       if (task.finished) {
-        console.log("Done");
         return {
           taskDone: state.taskDone.filter(
             (taskItem) => taskItem._id !== task._id
           ),
         };
       } else if (!task.finished && deadline >= today && deadline < tomorrow) {
-        console.log("Doing");
         return {
           taskDoing: state.taskDoing.filter(
             (taskItem) => taskItem._id !== task._id
           ),
         };
-      } else {  
-        console.log("ToDo");
+      } else {
         return {
           taskToDo: state.taskToDo.filter(
             (taskItem) => taskItem._id !== task._id

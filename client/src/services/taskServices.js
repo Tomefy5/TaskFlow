@@ -24,8 +24,17 @@ export const fetchTasksToDo = async (isFinished, isDoing) => {
 
 export const deleteTask = async (taskId) => {
   try {
-    const response = await api.delete(`/delete-task?taskId=${taskId}`);
-    console.log(response.data);
+    await api.delete(`/delete-task?taskId=${taskId}`);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const changeTaskStatus = async (taskId, newStatus) => {
+  try {
+    api.put(`/update-task?taskId=${taskId}`, {
+      finished: newStatus,
+    });
   } catch (error) {
     console.log(error.message);
   }

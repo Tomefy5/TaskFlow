@@ -18,13 +18,14 @@ import { useDrag } from "react-dnd";
 import { useTaskStore } from "@/store/taskStore";
 import { deleteTask } from "@/services/taskServices";
 
-export default function Task({ name, task }) {
-
-  const deleteTaskFromStore = useTaskStore(state => state.deleteTaskFromStore);
+export default function Task({ task, currentStatus }) {
+  const deleteTaskFromStore = useTaskStore(
+    (state) => state.deleteTaskFromStore
+  );
 
   const [{ isDragging }, dragRef] = useDrag({
     type: "TASK",
-    item: name,
+    item: { ...task, source: currentStatus },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -33,7 +34,7 @@ export default function Task({ name, task }) {
   const handleTaskDelete = async (task) => {
     await deleteTask(task._id);
     deleteTaskFromStore(task);
-  }
+  };
 
   return (
     <Card className={`w-full ${isDragging ? "opacity-40" : ""}`} ref={dragRef}>

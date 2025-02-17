@@ -4,15 +4,14 @@ import Task from "./Task";
 import { useDrop } from "react-dnd";
 import { useTaskStore } from "@/store/taskStore";
 import { useEffect } from "react";
-import { fetchTasksToDo } from "@/services/taskServices";
+import { changeTaskStatus, fetchTasksToDo } from "@/services/taskServices";
 
 export default function ContainerTasksDone() {
-  const taskDone = useTaskStore((state) => state.taskDone);
-  const setTaskDone = useTaskStore((state) => state.setTaskDone);
+  const { taskDone, setTaskDone, addNewTaskDone, removeToDo, removeDoing } = useTaskStore();
 
   const [{ isOver }, dropref] = useDrop({
     accept: "TASK",
-    drop: (item) => ondrop(item),
+    drop: (item) => dropHander(item),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
@@ -30,6 +29,22 @@ export default function ContainerTasksDone() {
     fetchTasks();
   }, [setTaskDone]);
 
+  const dropHander = (item) => {
+    const changeStatus = async () => {
+      await changeTaskStatus(item._id, true);
+    };
+    changeStatus();
+    addNewTaskDone(item);
+
+    const remover = () => {
+      if(item.source === "Doing") {
+        removeDoing(item._id);
+      } else if (item.source === "ToDo") {
+        removeToDo(item._id);
+      }
+    }
+    remover();
+  };
   return (
     <div
       ref={dropref}
@@ -37,7 +52,6 @@ export default function ContainerTasksDone() {
         isOver ? "bg-red-300" : ""
       }`}
     >
-      {console.log(taskDone)}
       <div className="items-center flex justify-between">
         <h2 className="font-bold text-lg md:text-2xl">Done</h2>
         <Button variant="ghost" className="flex justify-center items-center">
@@ -47,7 +61,7 @@ export default function ContainerTasksDone() {
       {/*//!List todo */}
       <div className="flex flex-col gap-3 my-4 max-h-[70vh] overflow-auto p-2">
         {taskDone.map((task, index) => (
-          <Task key={index} task={task} />
+          <Task key={index} task={task} currentStatus={"Done"} />
         ))}
       </div>
     </div>

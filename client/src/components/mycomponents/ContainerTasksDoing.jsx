@@ -4,15 +4,14 @@ import Task from "./Task";
 import { useDrop } from "react-dnd";
 import { useTaskStore } from "@/store/taskStore";
 import { useEffect } from "react";
-import { fetchTasksToDo } from "@/services/taskServices";
+import { changeTaskStatus, fetchTasksToDo } from "@/services/taskServices";
 
 export default function ContainerTasksDoing() {
-  const taskDoing = useTaskStore((state) => state.taskDoing);
-  const setTaskDoing = useTaskStore((state) => state.setTaskDoing);
+  const { taskDoing, setTaskDoing, addNewTaskDoing, removeDone, removeToDo } = useTaskStore();
 
   const [{ isOver }, dropref] = useDrop({
     accept: "TASK",
-    drop: (item) => ondrop(item),
+    drop: (item) => dropHander(item),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
@@ -31,6 +30,23 @@ export default function ContainerTasksDoing() {
     }
   }, [setTaskDoing]);
 
+  const dropHander = (item) => {
+    const changeStatus = async () => {
+      await changeTaskStatus(item._id, false);
+    };
+    changeStatus(); 
+    addNewTaskDoing(item);
+
+    const remover = () => {
+      if(item.source === "Done") {
+        removeDone(item._id);
+      } else if(item.source === "ToDo") {
+        removeToDo(item._id);
+      }
+    }
+    remover();
+  };
+
   return (
     <div
       ref={dropref}
@@ -47,7 +63,7 @@ export default function ContainerTasksDoing() {
       {/*//!List todo */}
       <div className="flex flex-col gap-3 my-4 max-h-[70vh] overflow-auto p-2">
         {taskDoing.map((task, index) => (
-          <Task key={index} task={task}  />
+          <Task key={index} task={task} currentStatus={"Doing"} />
         ))}
       </div>
     </div>
