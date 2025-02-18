@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const register = async (user) => {
   const { username, email, password } = user;
@@ -21,4 +23,33 @@ const register = async (user) => {
   }
 };
 
-module.exports = { register };
+const login = async (userInfo) => {
+
+  const { email, password } = userInfo;
+  
+  try {
+    if (!email || !password) {
+      throw new Error("login: data missing required");
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error("login: User not found");
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new Error("login: Invalid credentials");
+    }
+
+    const accessToken = jwt.sign({ user: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRATION || "1d",
+    });
+
+    return { accessToken, user };
+  } catch (error) {
+    throw error;
+  }
+}
+
+module.exports = { register, login };
