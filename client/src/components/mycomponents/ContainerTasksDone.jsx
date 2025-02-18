@@ -30,6 +30,11 @@ export default function ContainerTasksDone() {
   }, [setTaskDone]);
 
   const dropHander = (item) => {
+
+    if(item.source === "Done") {
+      return;
+    }
+
     const changeStatus = async () => {
       await changeTaskStatus(item._id, true);
     };

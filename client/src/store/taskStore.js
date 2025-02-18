@@ -10,7 +10,7 @@ export const useTaskStore = create((set) => ({
   addNewTaskDoing: (newTask) =>
     set((state) => ({ taskDoing: [...state.taskDoing, newTask] })),
   addNewTaskDone: (newTask) =>
-    set((state) => ({ taskDone: [...state.taskDoing, newTask] })),
+    set((state) => ({ taskDone: [...state.taskDone, newTask] })),
   removeToDo: (taskId) =>
     set((state) => ({
       taskToDo: state.taskToDo.filter((task) => task._id !== taskId),
