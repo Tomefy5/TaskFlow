@@ -7,7 +7,8 @@ import { useEffect } from "react";
 import { changeTaskStatus, fetchTasksToDo } from "@/services/taskServices";
 
 export default function ContainerTasksDone() {
-  const { taskDone, setTaskDone, addNewTaskDone, removeToDo, removeDoing } = useTaskStore();
+  const { taskDone, setTaskDone, addNewTaskDone, removeToDo, removeDoing } =
+    useTaskStore();
 
   const [{ isOver }, dropref] = useDrop({
     accept: "TASK",
@@ -30,8 +31,7 @@ export default function ContainerTasksDone() {
   }, [setTaskDone]);
 
   const dropHander = (item) => {
-
-    if(item.source === "Done") {
+    if (item.source === "Done") {
       return;
     }
 
@@ -42,12 +42,12 @@ export default function ContainerTasksDone() {
     addNewTaskDone(item);
 
     const remover = () => {
-      if(item.source === "Doing") {
+      if (item.source === "Doing") {
         removeDoing(item._id);
       } else if (item.source === "ToDo") {
         removeToDo(item._id);
       }
-    }
+    };
     remover();
   };
   return (
