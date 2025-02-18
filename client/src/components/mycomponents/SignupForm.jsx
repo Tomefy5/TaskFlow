@@ -12,15 +12,22 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { register } from "@/services/userServices";
 
 const signupSchema = z.object({
+  username: z.string().min(1, "Name is required"),
   email: z.string().min(1, "Email is required").email("Invalid email"),
   password: z.string().min(4, "Password must contains at least 4 characters"),
 });
 
 export default function SignupForm() {
   const formFields = [
-    { field: "Name", placeholder: "your name...", name: "name", type: "text" },
+    {
+      field: "Name",
+      placeholder: "your name...",
+      name: "username",
+      type: "text",
+    },
     {
       field: "Email",
       placeholder: "your email...",
@@ -38,14 +45,18 @@ export default function SignupForm() {
   const form = useForm({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      name: "",
+      username: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values) => {
-    console.log("Connexion", values);
+  const onSubmit = (data) => {
+    const userRegistration = async () => {
+      await register(data);
+    }
+    userRegistration();
+    // console.log(data);
   };
 
   return (
