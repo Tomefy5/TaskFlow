@@ -3,14 +3,17 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ListTodo } from "lucide-react";
 import { toast } from "react-toastify";
 import { logout } from "@/services/userServices";
+import { useTaskStore } from "@/store/taskStore";
 
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { clearStore } = useTaskStore();
 
   const logoutHandler = async () => {
     try {
       await logout();
+      clearStore();
       navigate("/login");
     } catch (error) {
       toast.error(error);

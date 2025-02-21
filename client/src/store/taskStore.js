@@ -60,4 +60,5 @@ export const useTaskStore = create((set) => ({
         };
       }
     }),
+    clearStore: () => set({ taskToDo: [], taskDoing: [], taskDone: [] }),
 }));
