@@ -10,11 +10,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { login } from "@/services/userServices";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
+  const navigate = useNavigate();
+
   const signupSchema = z.object({
-    name: z.string().min(2, "Name must contain at least 2 characters"),
     email: z.string().email("Invalid email").min(1, "Email is required"),
     password: z.string().min(6, "Password must contain at least 6 characters"),
   });
@@ -22,7 +25,6 @@ export default function LoginForm() {
   const form = useForm({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
@@ -43,8 +45,10 @@ export default function LoginForm() {
     },
   ];
 
-  const onSubmit = (data) => {
-    console.log("Valeurs", data);
+  const onSubmit = async (data) => {
+    await login(data);
+
+    navigate("/tasks");
   };
 
   return (
@@ -54,7 +58,7 @@ export default function LoginForm() {
         className="w-[75%] md:w-[50%] mx-auto max-w-[490px] min-w-[310px] p-8 rounded-md mt-28 border flex flex-col justify-center gap-2"
       >
         <h1 className="font-extrabold text-xl md:text-2xl text-center mb-4">
-          Sign Up
+          Sign In
         </h1>
 
         {formFields.map((formField, index) => (
@@ -79,7 +83,7 @@ export default function LoginForm() {
         ))}
 
         <Button className="mt-6" type="submit">
-          Sign up
+          Login
         </Button>
       </form>
     </Form>

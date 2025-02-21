@@ -8,4 +8,7 @@ router.post("/register", userControllers.registerHandler);
 // Route for login a user
 router.post("/login", userControllers.loginHandler);
 
+// Route for logout
+router.post("/logout", userControllers.logoutHandler);
+
 module.exports = router;

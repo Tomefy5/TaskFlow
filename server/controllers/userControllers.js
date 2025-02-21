@@ -30,7 +30,21 @@ const loginHandler = async (req, res) => {
   }
 };
 
+const logoutHandler = (req, res) => {
+  try {
+    res.clearCookie("token", {
+      path: "/", // Même chemin que lors de la création
+      secure: true, // Si utilisé en HTTPS
+      sameSite: "strict", // Si défini initialement
+    });
+    res.status(200).json({ message: "Déconnexion réussie" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   registerHandler,
   loginHandler,
+  logoutHandler,
 };

@@ -9,4 +9,5 @@ export const apiUrls = {
   // User APIs URLs
   REGISTER_URL: "/register",
   LOGIN_URL: "/login",
+  LOGOUT_URL: "/logout"
 };

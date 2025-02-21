@@ -1,8 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ListTodo } from "lucide-react";
+import { toast } from "react-toastify";
+import { logout } from "@/services/userServices";
 
 export default function Header() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const logoutHandler = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   return (
     <header className="border-b bg-background/95 backdrop-blur">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -13,12 +27,18 @@ export default function Header() {
         </div>
         {/* Buttons */}
         <div className="flex items-center space-x-4">
-          <Button asChild variant="outline">
-            <Link to="/signup">Sign Up</Link>
-          </Button>
-          <Button asChild>
-            <Link to="/login">Login</Link>
-          </Button>
+          {location.pathname === "/tasks" ? (
+            <Button onClick={logoutHandler}>Logout</Button>
+          ) : (
+            <>
+              <Button asChild variant="outline">
+                <Link to="/signup">Sign Up</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/login">Login</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>

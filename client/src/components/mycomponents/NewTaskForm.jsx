@@ -37,7 +37,6 @@ const formSchema = z.object({
 });
 
 export default function NewTaskForm() {
-  const tasks = useTaskStore((state) => state.tasks);
   const addNewTaskToDo = useTaskStore((state) => state.addNewTaskToDo);
   const addNewTaskDoing = useTaskStore((state) => state.addNewTaskDoing);
 
@@ -70,7 +69,6 @@ export default function NewTaskForm() {
 
   return (
     <Form {...form}>
-      {console.log(tasks)}
       <form onSubmit={form.handleSubmit(onSubmit)}>
         {" "}
         <FormField
