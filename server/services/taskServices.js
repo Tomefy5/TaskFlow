@@ -1,7 +1,10 @@
 const { default: mongoose } = require("mongoose");
 const Task = require("../models/Task");
 
-const createTask = async (task) => {
+const createTask = async (task, userId) => {
+
+  const userObjectId = new mongoose.Types.ObjectId(userId);
+
   // Title verification
   if (!task.title || typeof task.title !== "string") {
     throw new Error(
@@ -14,7 +17,7 @@ const createTask = async (task) => {
   }
 
   try {
-    const newTask = new Task(task);
+    const newTask = new Task({ ...task, user: userObjectId });
     await newTask.save();
     return newTask;
   } catch (error) {
@@ -22,7 +25,9 @@ const createTask = async (task) => {
   }
 };
 
-const getTasks = async (isFinished, isDoing) => {
+const getTasks = async (isFinished, isDoing, userId) => {
+  const userObjectId = new mongoose.Types.ObjectId(userId);
+
   if (typeof isFinished !== "boolean")
     throw new Error("getTasks: param must be a boolean");
 
@@ -38,6 +43,7 @@ const getTasks = async (isFinished, isDoing) => {
     if (isDoing && !isFinished) {
       tasks = await Task.find({
         finished: isFinished,
+        user: userObjectId,
         deadline: {
           $gte: startOfToday,
           $lt: startOfTomorrow,
@@ -46,13 +52,14 @@ const getTasks = async (isFinished, isDoing) => {
     } else if (!isDoing && !isFinished) {
       tasks = await Task.find({
         finished: isFinished,
+        user: userObjectId,
         $or: [
           { deadline: { $lt: startOfToday } },
           { deadline: { $gte: startOfTomorrow } },
         ],
       });
     } else {
-      tasks = await Task.find({ finished: true });
+      tasks = await Task.find({ finished: true, user: userObjectId });
     }
 
     if (!tasks) throw new Error("getTasks: failed to get tasks");

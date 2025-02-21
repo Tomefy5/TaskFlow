@@ -22,6 +22,11 @@ const TaskSchema = new Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     }
 
 }, { timestamps: true });

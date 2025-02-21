@@ -46,7 +46,7 @@ export default function LoginForm() {
   ];
 
   const onSubmit = async (data) => {
-    await login(data);
+     await login(data);
 
     navigate("/tasks");
   };

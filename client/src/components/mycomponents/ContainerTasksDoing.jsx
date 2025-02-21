@@ -55,12 +55,12 @@ export default function ContainerTasksDoing() {
   return (
     <div
       ref={dropref}
-      className={`p-4 border w-full h-auto min-h-[350px] rounded ${
-        isOver ? "bg-red-400" : ""
+      className={`transition-all duration-150 p-4 border w-full h-auto min-h-[350px] rounded ${
+        isOver ? "bg-black bg-opacity-90" : ""
       }`}
     >
       <div className="items-center flex justify-between">
-        <h2 className="font-bold text-lg md:text-2xl">Doing</h2>
+        <h2 className={`${isOver ? "text-white": ""} font-bold text-lg md:text-2xl`}>Doing</h2>
         <Button variant="ghost" className="flex justify-center items-center">
           <Ellipsis />
         </Button>

@@ -56,7 +56,7 @@ export default function SignupForm() {
       await register(data);
     }
     userRegistration();
-    // console.log(data);
+    form.reset();
   };
 
   return (
