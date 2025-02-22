@@ -1,11 +1,18 @@
-import { Facebook, Twitter, Instagram } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Facebook, MessageCircle, Github } from "lucide-react";
 
 export default function Footer() {
   const contacts = [
-    { contact: "facebook", Icon: Facebook, href: "" },
-    { contact: "twitter", Icon: Twitter, href: "" },
-    { contact: "instagram", Icon: Instagram, href: "" },
+    { contact: "github", Icon: Github, href: "https://github.com/Tomefy5" },
+    {
+      contact: "whatsapp",
+      Icon: MessageCircle,
+      href: "https://wa.me/261327137415",
+    },
+    {
+      contact: "facebook",
+      Icon: Facebook,
+      href: "https://web.facebook.com/tomefy.andrytsiresy",
+    },
   ];
 
   return (
@@ -13,19 +20,19 @@ export default function Footer() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Mention de copyright */}
         <div className="text-sm">
-          &copy; {new Date().getFullYear()} TaskFlow. All rights reserved    
+          &copy; {new Date().getFullYear()} TaskFlow - Built by Tomefy
         </div>
         {/* Liens vers les réseaux sociaux */}
-        <div className="flex items-center space-x-4"> 
+        <div className="flex items-center space-x-4">
           {contacts.map((contact, index) => (
-            <Link
+            <a
               key={index}
               href={contact.href}
               target="_blank"
               rel="noopener noreferrer"
             >
               <contact.Icon className="h-5 w-5" />
-            </Link>
+            </a>
           ))}
         </div>
       </div>

@@ -27,7 +27,6 @@ export default function ContainerTasksToDo() {
       try {
         if (user && user._id) {
           const tasksToDo = await fetchTasksToDo(user._id, false, false);
-          console.log("User: ", user);
           setTaskToDo(tasksToDo);
         }
       } catch (error) {
@@ -75,7 +74,7 @@ export default function ContainerTasksToDo() {
         </Button>
       </div>
       {/*//!List todo */}
-      <div className="flex flex-col gap-3 my-4 max-h-[70vh] overflow-auto p-2">
+      <div className="flex flex-col gap-3 my-4 max-h-[60vh] overflow-auto p-2">
         {taskToDo.map((task) => (
           <Task key={task._id} task={task} currentStatus={"ToDo"} />
         ))}

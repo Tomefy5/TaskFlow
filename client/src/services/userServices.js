@@ -20,6 +20,7 @@ export const login = async (loginInfo) => {
     return response.data;
   } catch (error) {
     const message = error.response?.data?.error || "Connexion failed";
+    toast.error("Invalid email or password");
     throw new Error(message);
   }
 };

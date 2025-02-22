@@ -77,7 +77,7 @@ export default function ContainerTasksDoing() {
         </Button>
       </div>
       {/*//!List todo */}
-      <div className="flex flex-col gap-3 my-4 max-h-[70vh] overflow-auto p-2">
+      <div className="flex flex-col gap-3 my-4 max-h-[60vh] overflow-auto p-2">
         {taskDoing.map((task, index) => (
           <Task key={index} task={task} currentStatus={"Doing"} />
         ))}
