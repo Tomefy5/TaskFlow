@@ -1,5 +1,5 @@
 // Auth for front end
-const getToken = (req, res) => {
+const getAuthHandler = (req, res) => {
   const token = req.cookies.token;
   if (token) {
     res.json({ isAuthenticated: true });
@@ -8,4 +8,4 @@ const getToken = (req, res) => {
   }
 };
 
-module.exports = router;
+module.exports = { getAuthHandler };

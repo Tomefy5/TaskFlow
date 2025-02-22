@@ -11,7 +11,7 @@ export default function ContainerTasksDoing() {
   const { taskDoing, setTaskDoing, addNewTaskDoing, removeDone, removeToDo } =
     useTaskStore();
 
-    const { user } = useUserStore();
+  const { user } = useUserStore();
 
   const [{ isOver }, dropref] = useDrop({
     accept: "TASK",
@@ -24,8 +24,10 @@ export default function ContainerTasksDoing() {
   useEffect(() => {
     try {
       const fetchingTask = async () => {
-        const tasks = await fetchTasksToDo(user._id, false, true);
-        setTaskDoing(tasks);
+        if (user && user._id) {
+          const tasks = await fetchTasksToDo(user._id, false, true);
+          setTaskDoing(tasks);
+        }
       };
 
       fetchingTask();
@@ -63,7 +65,13 @@ export default function ContainerTasksDoing() {
       }`}
     >
       <div className="items-center flex justify-between">
-        <h2 className={`${isOver ? "text-white": ""} font-bold text-lg md:text-2xl`}>Doing</h2>
+        <h2
+          className={`${
+            isOver ? "text-white" : ""
+          } font-bold text-lg md:text-2xl`}
+        >
+          Doing
+        </h2>
         <Button variant="ghost" className="flex justify-center items-center">
           <Ellipsis />
         </Button>

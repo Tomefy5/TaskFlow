@@ -24,10 +24,11 @@ export default function ContainerTasksToDo() {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      
       try {
-        const tasksToDo = await fetchTasksToDo(user._id, false, false); 
-        setTaskToDo(tasksToDo);
+        if (user && user._id) {
+          const tasksToDo = await fetchTasksToDo(user._id, false, false);
+          setTaskToDo(tasksToDo);
+        }
       } catch (error) {
         console.error("Error on fetching tasks:", error);
       }
@@ -60,7 +61,7 @@ export default function ContainerTasksToDo() {
         isOver ? "bg-black bg-opacity-90" : ""
       }`}
     >
-      {console.log("Userrrrr: ",user)}
+      {console.log("Userrrrr: ", user)}
       <div className="items-center flex justify-between">
         <h2
           className={`${
