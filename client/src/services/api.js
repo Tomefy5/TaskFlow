@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api = await axios.create({
+const api = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL || "https://taskflow-backend-asmg.onrender.com/api",
   timeout: 5000,
   headers: {
