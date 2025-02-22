@@ -46,6 +46,7 @@ const login = async (userInfo) => {
       expiresIn: process.env.JWT_EXPIRATION || "1d",
     });
 
+    user._id = user._id.toString();
     return { accessToken, user };
   } catch (error) {
     throw error;

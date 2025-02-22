@@ -10,6 +10,7 @@ export default function TaskFlowPage() {
 
   useEffect(() => {
     const authToken = Cookies.get("token");
+    console.log(authToken)
     if (!authToken) {
       navigate("/login");
     }

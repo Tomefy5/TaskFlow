@@ -7,9 +7,10 @@ const {
 
 const createTaskHandler = async (req, res) => {
   const task = req.body;
+  const { userId } = req.query;
 
   try {
-    const newTask = await createTask(task);
+    const newTask = await createTask(task, userId);
     res.status(201).json(newTask);
   } catch (error) {
     res
@@ -20,13 +21,14 @@ const createTaskHandler = async (req, res) => {
 
 const getTasksHandler = async (req, res) => {
   const { finished, doing } = req.query;
+  const { userId } = req.query;
 
   try {
     if (typeof finished === "undefined") {
       throw new Error("getTasksHandler: param is required");
     }
 
-    const tasks = await getTasks(JSON.parse(finished), JSON.parse(doing));
+    const tasks = await getTasks(JSON.parse(finished), JSON.parse(doing), userId);
     res.status(200).json(tasks);
   } catch (error) {
     res.status(404).json({

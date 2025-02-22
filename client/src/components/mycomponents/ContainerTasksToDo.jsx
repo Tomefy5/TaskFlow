@@ -5,14 +5,18 @@ import { useDrop } from "react-dnd";
 import { useTaskStore } from "@/store/taskStore";
 import { useEffect } from "react";
 import { changeTaskStatus, fetchTasksToDo } from "@/services/taskServices";
+import { toast } from "react-toastify";
+import { useUserStore } from "@/store/userStore";
 
 export default function ContainerTasksToDo() {
+  const { user } = useUserStore();
+
   const { setTaskToDo, taskToDo, addNewTaskToDo, removeDoing, removeDone } =
     useTaskStore();
 
   const [{ isOver }, dropref] = useDrop({
     accept: "TASK",
-    drop: (item) => dropHander(item),
+    drop: (item) => dropHandler(item),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
@@ -20,35 +24,33 @@ export default function ContainerTasksToDo() {
 
   useEffect(() => {
     const fetchTasks = async () => {
+      
       try {
-        const tasksToDo = await fetchTasksToDo(false, false); // isFinished and isDoing
+        const tasksToDo = await fetchTasksToDo(user._id, false, false); 
         setTaskToDo(tasksToDo);
       } catch (error) {
         console.error("Error on fetching tasks:", error);
       }
     };
     fetchTasks();
-  }, [setTaskToDo]);
+  }, [setTaskToDo, user]);
 
-  const dropHander = (item) => {
-    if (item.source === "ToDo") {
-      return;
+  const dropHandler = async (item) => {
+    if (item.source === "ToDo") return;
+
+    try {
+      await changeTaskStatus(item._id, false);
+    } catch (error) {
+      toast.error(error.message);
     }
 
-    const changeStatus = async () => {
-      await changeTaskStatus(item._id, false);
-    };
-    changeStatus();
     addNewTaskToDo(item);
 
-    const remover = () => {
-      if (item.source === "Doing") {
-        removeDoing(item._id);
-      } else if (item.source === "Done") {
-        removeDone(item._id);
-      }
-    };
-    remover();
+    if (item.source === "Doing") {
+      removeDoing(item._id);
+    } else if (item.source === "Done") {
+      removeDone(item._id);
+    }
   };
 
   return (
@@ -58,16 +60,23 @@ export default function ContainerTasksToDo() {
         isOver ? "bg-black bg-opacity-90" : ""
       }`}
     >
+      {console.log("Userrrrr: ",user)}
       <div className="items-center flex justify-between">
-        <h2 className={`${isOver ? "text-white": ""} font-bold text-lg md:text-2xl`}>To Do</h2>
+        <h2
+          className={`${
+            isOver ? "text-white" : ""
+          } font-bold text-lg md:text-2xl`}
+        >
+          To Do
+        </h2>
         <Button variant="ghost" className="flex justify-center items-center">
           <Ellipsis />
         </Button>
       </div>
       {/*//!List todo */}
       <div className="flex flex-col gap-3 my-4 max-h-[70vh] overflow-auto p-2">
-        {taskToDo.map((task, index) => (
-          <Task key={index} task={task} currentStatus={"ToDo"} />
+        {taskToDo.map((task) => (
+          <Task key={task._id} task={task} currentStatus={"ToDo"} />
         ))}
       </div>
     </div>

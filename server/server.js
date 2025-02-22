@@ -7,6 +7,7 @@ const port = process.env.PORT || 5000;
 const taskRoutes = require("./routes/taskRoutes");
 const userRoutes = require("./routes/userRoutes");
 const cookieParser = require("cookie-parser");
+const authRoutes = require("./routes/authRoutes");
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(cookieParser()); // Après CORS, mais avant les routes
 // Routes
 app.use("/api", taskRoutes);
 app.use("/api", userRoutes);
+app.use("/api", authRoutes);
 
 // Connexion à MongoDB
 mongoose

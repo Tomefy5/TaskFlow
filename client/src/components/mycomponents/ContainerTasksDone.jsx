@@ -5,10 +5,13 @@ import { useDrop } from "react-dnd";
 import { useTaskStore } from "@/store/taskStore";
 import { useEffect } from "react";
 import { changeTaskStatus, fetchTasksToDo } from "@/services/taskServices";
+import { useUserStore } from "@/store/userStore";
 
 export default function ContainerTasksDone() {
   const { taskDone, setTaskDone, addNewTaskDone, removeToDo, removeDoing } =
     useTaskStore();
+
+    const { user } = useUserStore();
 
   const [{ isOver }, dropref] = useDrop({
     accept: "TASK",
@@ -21,14 +24,14 @@ export default function ContainerTasksDone() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const taskDone = await fetchTasksToDo(true, false);
+        const taskDone = await fetchTasksToDo(user._id ,true, false);
         setTaskDone(taskDone);
       } catch (error) {
         console.error(`Error on fetching task: `, error.message);
       }
     };
     fetchTasks();
-  }, [setTaskDone]);
+  }, [setTaskDone, user]);
 
   const dropHander = (item) => {
     if (item.source === "Done") {

@@ -13,9 +13,12 @@ import { Input } from "@/components/ui/input";
 import { login } from "@/services/userServices";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@/store/userStore";
 
 export default function LoginForm() {
   const navigate = useNavigate();
+
+  const { setUser } = useUserStore();
 
   const signupSchema = z.object({
     email: z.string().email("Invalid email").min(1, "Email is required"),
@@ -46,8 +49,8 @@ export default function LoginForm() {
   ];
 
   const onSubmit = async (data) => {
-     await login(data);
-
+    const user = await login(data);
+    setUser(user);
     navigate("/tasks");
   };
 

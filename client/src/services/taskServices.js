@@ -1,9 +1,10 @@
 import api from "./api";
 import { apiUrls } from "./url";
 
-export const createTask = async (task) => {
+export const createTask = async (task, userId) => {
+
   try {
-    const response = await api.post(apiUrls.CREATE_TASK_URL, task);
+    const response = await api.post(`${apiUrls.CREATE_TASK_URL}?userId=${userId}`, task);
     if (!response.data)
       throw new Error("fetchTasks: error on creating new tasks");
   } catch (error) {
@@ -11,10 +12,11 @@ export const createTask = async (task) => {
   }
 };
 
-export const fetchTasksToDo = async (isFinished, isDoing) => {
+export const fetchTasksToDo = async (userId, isFinished, isDoing) => {
+
   try {
     const response = await api.get(
-      `${apiUrls.GET_TASKS_URL}?finished=${isFinished}&doing=${isDoing}`
+      `${apiUrls.GET_TASKS_URL}?finished=${isFinished}&doing=${isDoing}&userId=${userId}`
     );
     if (!response.data) throw new Error("fetchTasks: error on fetching tasks");
     return response.data; // tasks to do
