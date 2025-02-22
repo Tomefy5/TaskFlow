@@ -15,11 +15,12 @@ const loginHandler = async (req, res) => {
 
     //Send token with cookie
     res.cookie("token", accessToken, {
-      httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      secure: process.env.NODE_ENV === "production", // true en prod
-      maxAge: 2 * 60 * 60 * 1000,
-    });
+    httpOnly: true,
+    sameSite: "none", 
+    secure: true,    
+    maxAge: 2 * 60 * 60 * 1000,
+});
+
 
     res
       .status(200)
