@@ -17,6 +17,7 @@ import { PriorityCombobox } from "./PriorityComboBox";
 
 import { useTaskStore } from "@/store/taskStore";
 import { createTask } from "@/services/taskServices";
+import { useUserStore } from "@/store/userStore";
 
 const formSchema = z.object({
   title: z.string().min(2, "At least 2 characters"),
@@ -39,6 +40,7 @@ const formSchema = z.object({
 export default function NewTaskForm() {
   const addNewTaskToDo = useTaskStore((state) => state.addNewTaskToDo);
   const addNewTaskDoing = useTaskStore((state) => state.addNewTaskDoing);
+  const { user } = useUserStore();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -63,7 +65,7 @@ export default function NewTaskForm() {
     } else {
       addNewTaskToDo(data);
     }
-    createTask(data);
+    createTask(data, user._id);
     form.reset();
   };
 

@@ -27,6 +27,7 @@ export default function ContainerTasksToDo() {
       try {
         if (user && user._id) {
           const tasksToDo = await fetchTasksToDo(user._id, false, false);
+          console.log("User: ", user);
           setTaskToDo(tasksToDo);
         }
       } catch (error) {
@@ -61,7 +62,6 @@ export default function ContainerTasksToDo() {
         isOver ? "bg-black bg-opacity-90" : ""
       }`}
     >
-      {console.log("Userrrrr: ", user)}
       <div className="items-center flex justify-between">
         <h2
           className={`${
