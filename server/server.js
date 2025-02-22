@@ -14,7 +14,7 @@ dotenv.config();
 // Middleware CORS unique et bien configuré
 app.use(
   cors({
-    origin: "http://localhost:5173", 
+    origin: "https://taskflow-frontend-seven.vercel.app/", 
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
